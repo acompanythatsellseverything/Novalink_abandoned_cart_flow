@@ -9,5 +9,5 @@ celery = Celery(
 )
 
 @celery.task
-def process_abandoned_cart(email: str):
-    NovalinkAbandonedCart().main(email)
+def process_abandoned_cart_task(cart_data: dict):
+    NovalinkAbandonedCart().main(cart_data)

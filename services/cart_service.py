@@ -12,20 +12,23 @@ class NovalinkAbandonedCart():
         pass
 
     def main(self, data):
+        if not isinstance(data, dict):
+          raise ValueError("data must be a dict")
         print(data)
         user_id = data.user_id
         email=data.email
         checkout_data = self.noco_search_checkout(user_id)
 
+        #check if checkout is already paid
         if checkout_data['list'] != []:
             data = checkout_data
             if checkout_data['list'][0]['status'] == 'Paid successfully':
-              print('end')
               return None
 
         html = self.generate_html(data)
         self.send_html_template(html, email)
 
+    # check existence checkout
     def noco_search_checkout(self, user_id):
         headers = {
             "xc-token": os.getenv("NOCO_TOKEN")
@@ -271,7 +274,6 @@ a[x-apple-data-detectors] {
 </html>
         """   
         return html
-
 
     def send_html_template(self, html, email):
         payload ={

@@ -4,6 +4,8 @@ from tasks import process_abandoned_cart
 from services.cart_service import NovalinkAbandonedCart
 from typing import List, Optional
 import uvicorn
+from fastapi.encoders import jsonable_encoder
+
 
 app = FastAPI()
 
@@ -30,10 +32,9 @@ class CartData(BaseModel):
 
 @app.post("/")
 async def cart_data(data: CartData):
-    # wait 20 min
-    # process_abandoned_cart.apply_async((email,), countdown=2)#20*60
-    # print(data)
-    NovalinkAbandonedCart().main(data)
+    data_dict = jsonable_encoder(data)
+    process_abandoned_cart_task.apply_async((data_dict,), countdown=20*60)
+    return {"status": "scheduled"}
     
 
 if __name__ == '__main__':
