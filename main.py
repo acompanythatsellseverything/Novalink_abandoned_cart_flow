@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from tasks import process_abandoned_cart
+from tasks import process_abandoned_cart_task
 from services.cart_service import NovalinkAbandonedCart
 from typing import List, Optional
 import uvicorn
