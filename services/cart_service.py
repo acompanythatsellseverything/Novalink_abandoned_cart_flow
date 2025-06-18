@@ -15,9 +15,8 @@ class NovalinkAbandonedCart():
         if not isinstance(data, dict):
           raise ValueError("data must be a dict")
         print(data)
-        user_id = data.user_id
         email=data.email
-        checkout_data = self.noco_search_checkout(user_id)
+        checkout_data = self.noco_search_checkout(email)
 
         #check if checkout is already paid
         if checkout_data['list'] != []:
@@ -29,12 +28,12 @@ class NovalinkAbandonedCart():
         self.send_html_template(html, email)
 
     # check existence checkout
-    def noco_search_checkout(self, user_id):
+    def noco_search_checkout(self, email):
         headers = {
             "xc-token": os.getenv("NOCO_TOKEN")
         }
         query = {
-            "where": f"(user_id,eq,{user_id})"
+            "where": f"(email,eq,{email})"
         }
         url=os.getenv("NOCO_URL")
 

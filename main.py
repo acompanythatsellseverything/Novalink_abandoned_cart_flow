@@ -5,9 +5,23 @@ from services.cart_service import NovalinkAbandonedCart
 from typing import List, Optional
 import uvicorn
 from fastapi.encoders import jsonable_encoder
-
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+    "https://novalinkwireless.com/"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # allow these origins
+    allow_credentials=True,
+    allow_methods=["*"],    # allow all HTTP methods
+    allow_headers=["*"],    # allow all headers
+)
 
 class SimType(BaseModel):
     simType: str
@@ -27,7 +41,6 @@ class PlanData(BaseModel):
 
 class CartData(BaseModel):
     email: str
-    user_id: int
     plans: List[PlanData]
 
 @app.post("/webhook")
