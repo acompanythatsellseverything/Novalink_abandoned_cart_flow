@@ -46,7 +46,7 @@ class CartData(BaseModel):
 @app.post("/webhook")
 async def cart_data(data: CartData):
     data_dict = jsonable_encoder(data)
-    process_abandoned_cart_task.apply_async((data_dict,), countdown=20*60)
+    process_abandoned_cart_task.apply_async((data_dict,), countdown=1)
     return {"status": "scheduled"}
     
 
